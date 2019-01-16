@@ -1,5 +1,8 @@
 package com.felix.security.jwt.security;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.felix.security.jwt.entity.UserAuthority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
@@ -20,8 +23,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -83,7 +88,14 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    public List<String> getAuthorityFromToken(String token) {
+        String authorityJson = getClaimFromToken(token, Claims::getAudience);
+        return JSONObject.parseArray(
+                authorityJson, UserAuthority.class).stream().map(UserAuthority::getAuthority)
+                .collect(Collectors.toList());
+    }
+
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
@@ -111,16 +123,17 @@ public class JwtTokenUtil implements Serializable {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        return doGenerateToken(claims, userDetails.getUsername(), JSONObject.toJSONString(userDetails.getAuthorities()));
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims, String subject, String aduience) {
         final Date createdDate = clock.now();
         final Date expirationDate = calculateExpirationDate(createdDate);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .setAudience(aduience)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
 //                .signWith(SignatureAlgorithm.HS512, secret)

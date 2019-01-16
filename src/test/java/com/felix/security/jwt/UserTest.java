@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author grez
@@ -55,7 +56,8 @@ public class UserTest {
         UserDetails admin = userDetailsService.loadUserByUsername("admin");
         System.out.println(admin);
         String token = jwtTokenUtil.generateToken(userDetailsService.loadUserByUsername("admin"));
-        System.out.println(token);
+        List<String> audienceFromToken = jwtTokenUtil.getAuthorityFromToken(token);
+        System.out.println(audienceFromToken);
         Boolean canlogin = jwtTokenUtil.validateToken(token, admin);
         System.out.println(canlogin);
     }
@@ -66,6 +68,8 @@ public class UserTest {
         String usernameFromToken = jwtTokenUtil.getUsernameFromToken(s);
         Date issuedAtDateFromToken = jwtTokenUtil.getIssuedAtDateFromToken(s);
         Date expirationDateFromToken = jwtTokenUtil.getExpirationDateFromToken(s);
+        List<String> audienceFromToken = jwtTokenUtil.getAuthorityFromToken(s);
+        System.out.println(audienceFromToken);
         System.out.println(usernameFromToken);
         ZoneId zone = ZoneId.systemDefault();
         System.out.println(LocalDateTime.ofInstant(issuedAtDateFromToken.toInstant(), zone));

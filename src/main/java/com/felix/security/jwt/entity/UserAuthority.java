@@ -17,7 +17,7 @@ public class UserAuthority {
     private Long id;
 
     @TableField(value = "name", strategy = FieldStrategy.NOT_NULL)
-    private AuthorityName name;
+    private String authority;
 
     public Long getId() {
         return id;
@@ -27,11 +27,11 @@ public class UserAuthority {
         this.id = id;
     }
 
-    public AuthorityName getName() {
-        return name;
+    public String getAuthority() {
+        return authority;
     }
 
-    public void setName(AuthorityName name) {
-        this.name = name;
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 }

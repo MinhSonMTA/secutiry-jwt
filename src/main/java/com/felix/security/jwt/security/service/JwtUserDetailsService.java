@@ -32,7 +32,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             for (UserInfoVo userInfoVo : userInfoVos) {
                 UserAuthority userAuthority = new UserAuthority();
                 userAuthority.setId(userInfoVo.getAuthorityId());
-                userAuthority.setName(userInfoVo.getName());
+                userAuthority.setAuthority(userInfoVo.getAuthority());
                 userAuthorities.add(userAuthority);
             }
             // 加载用户登陆

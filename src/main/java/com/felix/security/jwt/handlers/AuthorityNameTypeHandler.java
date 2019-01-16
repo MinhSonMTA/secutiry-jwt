@@ -1,6 +1,5 @@
 package com.felix.security.jwt.handlers;
 
-import com.felix.security.jwt.entity.AuthorityName;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
@@ -15,28 +14,28 @@ import java.sql.SQLException;
  * @author grez
  * @since 19-1-13
  **/
-public class AuthorityNameTypeHandler implements TypeHandler<AuthorityName> {
+public class AuthorityNameTypeHandler implements TypeHandler<String> {
 
     @Override
-    public void setParameter(PreparedStatement ps, int i, AuthorityName parameter, JdbcType jdbcType) throws SQLException {
-        ps.setString(i, parameter.name());
+    public void setParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType) throws SQLException {
+        ps.setString(i, parameter);
     }
 
     @Override
-    public AuthorityName getResult(ResultSet rs, String columnName) throws SQLException {
+    public String getResult(ResultSet rs, String columnName) throws SQLException {
         String name = rs.getString(columnName);
-        return AuthorityName.valueOf(name);
+        return name;
     }
 
     @Override
-    public AuthorityName getResult(ResultSet rs, int columnIndex) throws SQLException {
+    public String getResult(ResultSet rs, int columnIndex) throws SQLException {
         String name = rs.getString(columnIndex);
-        return AuthorityName.valueOf(name);
+        return (name);
     }
 
     @Override
-    public AuthorityName getResult(CallableStatement cs, int columnIndex) throws SQLException {
+    public String getResult(CallableStatement cs, int columnIndex) throws SQLException {
         String name = cs.getString(columnIndex);
-        return AuthorityName.valueOf(name);
+        return name;
     }
 }

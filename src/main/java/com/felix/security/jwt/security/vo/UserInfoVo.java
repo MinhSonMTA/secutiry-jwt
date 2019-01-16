@@ -1,7 +1,5 @@
 package com.felix.security.jwt.security.vo;
 
-import com.felix.security.jwt.entity.AuthorityName;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -32,7 +30,7 @@ public class UserInfoVo {
     private Long authorityId;
 
     @NotNull
-    private AuthorityName name;
+    private String authority;
 
     public Long getId() {
         return id;
@@ -82,11 +80,11 @@ public class UserInfoVo {
         this.authorityId = authorityId;
     }
 
-    public AuthorityName getName() {
-        return name;
+    public String getAuthority() {
+        return authority;
     }
 
-    public void setName(AuthorityName name) {
-        this.name = name;
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 }
