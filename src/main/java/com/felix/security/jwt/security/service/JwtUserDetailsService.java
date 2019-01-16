@@ -36,8 +36,6 @@ public class JwtUserDetailsService implements UserDetailsService {
                 userAuthorities.add(userAuthority);
             }
             // 加载用户登陆
-            Long id = userInfoVos.get(0).getId();
-            System.out.println(id);
             user.setId(userInfoVos.get(0).getId());
             user.setUsername(userInfoVos.get(0).getUsername());
             user.setPassword(userInfoVos.get(0).getPassword());

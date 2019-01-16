@@ -4,7 +4,7 @@
 
 $(function () {
     // VARIABLES =============================================================
-    var TOKEN_KEY = "jwtToken"
+    var TOKEN_KEY = "jwt-cookie";
     var $notLoggedIn = $("#notLoggedIn");
     var $loggedIn = $("#loggedIn").hide();
     var $loggedInBody = $("#loggedInBody");
@@ -14,15 +14,17 @@ $(function () {
 
     // FUNCTIONS =============================================================
     function getJwtToken() {
-        return localStorage.getItem(TOKEN_KEY);
+        var token = getCookie(TOKEN_KEY);
+        console.log(token);
+        return getCookie(TOKEN_KEY);
     }
 
     function setJwtToken(token) {
-        localStorage.setItem(TOKEN_KEY, token);
+        //localStorage.setItem(TOKEN_KEY, token);
     }
 
     function removeJwtToken() {
-        localStorage.removeItem(TOKEN_KEY);
+        removeCookie(TOKEN_KEY);
     }
 
     function doLogin(loginData) {

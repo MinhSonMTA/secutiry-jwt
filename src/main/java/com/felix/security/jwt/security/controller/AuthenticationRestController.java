@@ -1,5 +1,6 @@
 package com.felix.security.jwt.security.controller;
 
+import com.felix.security.jwt.security.CookieUtil;
 import com.felix.security.jwt.security.JwtAuthenticationRequest;
 import com.felix.security.jwt.security.JwtTokenUtil;
 import com.felix.security.jwt.security.JwtUser;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 @RestController
@@ -36,8 +38,14 @@ public class AuthenticationRestController {
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private CookieUtil cookieUtil;
+
+    @Value("${jwt.cookie.name}")
+    private String cookieName;
+
     @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
+    public ResponseEntity<?> createAuthenticationToken(HttpServletResponse response, @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
@@ -45,6 +53,7 @@ public class AuthenticationRestController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
 
+        cookieUtil.addCookie(response, "/", cookieName, token);
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
