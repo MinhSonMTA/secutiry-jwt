@@ -30,9 +30,11 @@ import java.util.function.Function;
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -3301605591108950415L;
     //加载jwt.jks文件
-    private static InputStream inputStream = null;
     private static PrivateKey privateKey = null;
     private static PublicKey publicKey = null;
+
+    @Value("${jwt.secret}")
+    private String secret;
 
     @Value("${jwt.keystore.filename}")
     private String keyStoreFileName;
@@ -88,6 +90,7 @@ public class JwtTokenUtil implements Serializable {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
+//                .setSigningKey(secret)
                 .setSigningKey(publicKey)
                 .parseClaimsJws(token)
                 .getBody();
@@ -120,6 +123,7 @@ public class JwtTokenUtil implements Serializable {
                 .setSubject(subject)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
+//                .signWith(SignatureAlgorithm.HS512, secret)
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
@@ -140,6 +144,7 @@ public class JwtTokenUtil implements Serializable {
 
         return Jwts.builder()
                 .setClaims(claims)
+//                .signWith(SignatureAlgorithm.HS512, secret)
                 .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }

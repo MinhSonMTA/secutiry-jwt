@@ -49,3 +49,18 @@ spring.datasource.driverClassName=org.postgresql.Driver
 spring.datasource.username=postgres
 spring.datasource.password=postgres
 ```
+
+### Using certificate generation script
+
+Running the script generates [gen_cert.sh](script/gen_cert.sh)
+
+`cert.pem gateway.jks gateway.p12 gateway_passphrase.pem`
+
+Put `cert.pem` and `gateway.jks` into the project
+
+The default configuration is as follows
+```
+jwt.keystore.filename=gateway.jks
+jwt.key.aliase=gateway-identity-jks
+jwt.keystore.password=123456
+```

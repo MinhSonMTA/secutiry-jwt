@@ -35,5 +35,3 @@ openssl x509 \
     -passin pass:123456 \
     -in gateway_passphrase.pem \
     -out cert.pem
-
-#cp cert.pem gateway.jks /opt/rdsp
