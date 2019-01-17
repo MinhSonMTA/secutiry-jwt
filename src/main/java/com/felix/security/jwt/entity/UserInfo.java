@@ -1,5 +1,6 @@
 package com.felix.security.jwt.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -9,9 +10,10 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
+
 /**
- * @author grez
- * @since 19-1-13
+ * @author felix-ma
+ * @create 2019/1/17 18:02
  **/
 @TableName("user_info")
 public class UserInfo {
@@ -32,6 +34,8 @@ public class UserInfo {
 
     @NotNull
     private Date updateTime;
+
+    private JSONObject additionalInfo;
 
     private List<UserAuthority> userAuthorities;
 
@@ -81,5 +85,13 @@ public class UserInfo {
 
     public void setUserAuthorities(List<UserAuthority> userAuthorities) {
         this.userAuthorities = userAuthorities;
+    }
+
+    public JSONObject getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(JSONObject additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 }

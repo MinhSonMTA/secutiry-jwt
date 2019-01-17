@@ -4,6 +4,7 @@ import com.felix.security.jwt.mapper.UserInfoMapper;
 import com.felix.security.jwt.entity.UserInfo;
 import com.felix.security.jwt.security.JwtTokenResolve;
 import com.felix.security.jwt.security.JwtTokenUtil;
+import com.felix.security.jwt.security.JwtUser;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class UserTest {
     public void encodeJWT() {
         UserDetails admin = userDetailsService.loadUserByUsername("admin");
         System.out.println(admin);
-        String token = jwtTokenUtil.generateToken(userDetailsService.loadUserByUsername("admin"));
+        String token = jwtTokenUtil.generateToken((JwtUser) userDetailsService.loadUserByUsername("admin"));
         String audienceFromToken = jwtTokenResolve.getAuthorityFromToken(token);
         System.out.println(audienceFromToken);
         Boolean canlogin = jwtTokenResolve.validateToken(token, admin);

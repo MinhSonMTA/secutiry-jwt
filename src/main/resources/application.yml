@@ -2,20 +2,20 @@ server:
   port: 9980
 
 # DataSource Config
-#spring:
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/jwt
-#    driverClassName: org.postgresql.Driver
-#    username: postgres
-#    password: postgres
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    schema: classpath:db/schema-h2.sql
-    data: classpath:db/data-h2.sql
-    url: jdbc:h2:mem:jwt
-    username: root
-    password: test
+    url: jdbc:postgresql://localhost:5432/jwt
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+#spring:
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    schema: classpath:db/schema-h2.sql
+#    data: classpath:db/data-h2.sql
+#    url: jdbc:h2:mem:jwt
+#    username: root
+#    password: test
 
 #mybatis-plus
 mybatis-plus:

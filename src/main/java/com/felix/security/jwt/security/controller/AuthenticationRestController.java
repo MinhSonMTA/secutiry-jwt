@@ -51,7 +51,7 @@ public class AuthenticationRestController {
 
         // Reload password post-security so we can generate the token
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        final String token = jwtTokenUtil.generateToken((JwtUser) userDetails);
 
         cookieUtil.addCookie(response, "/", cookieName, token);
         // Return the token

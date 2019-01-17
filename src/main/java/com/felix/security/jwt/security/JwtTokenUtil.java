@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 
 /**
+ * token构造解析器
  * @author felix-ma
  * @create 2019/1/17 13:49
  **/
@@ -118,10 +119,9 @@ public class JwtTokenUtil implements Serializable {
         return false;
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(JwtUser userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> collect = userDetails.getAuthorities().stream().map(Object::toString).collect(Collectors.toList());
-        return doGenerateToken(claims, userDetails.getUsername(), StringUtils.collectionToCommaDelimitedString(collect));
+        return doGenerateToken(claims, userDetails.getUsername(), userDetails.getAudience());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject, String aduience) {

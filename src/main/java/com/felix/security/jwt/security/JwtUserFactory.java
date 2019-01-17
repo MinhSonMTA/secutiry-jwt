@@ -20,7 +20,8 @@ public final class JwtUserFactory {
                 user.getPassword(),
                 mapToGrantedAuthorities(user.getUserAuthorities()),
                 user.getEnabled(),
-                user.getUpdateTime()
+                user.getUpdateTime(),
+                user.getAdditionalInfo().toJSONString()
         );
     }
 

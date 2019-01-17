@@ -1,5 +1,7 @@
 package com.felix.security.jwt.security.vo;
 
+import com.alibaba.fastjson.JSONObject;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -31,6 +33,8 @@ public class UserInfoVo {
 
     @NotNull
     private String authority;
+
+    private JSONObject additionalInfo;
 
     public Long getId() {
         return id;
@@ -86,5 +90,13 @@ public class UserInfoVo {
 
     public void setAuthority(String authority) {
         this.authority = authority;
+    }
+
+    public JSONObject getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(JSONObject additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 }

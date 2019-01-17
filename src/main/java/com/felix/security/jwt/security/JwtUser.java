@@ -16,6 +16,7 @@ public class JwtUser implements UserDetails {
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
+    private final String audience;
     private final boolean enabled;
     private final Date updateTime;
 
@@ -24,7 +25,8 @@ public class JwtUser implements UserDetails {
             String username,
             String password, Collection<? extends GrantedAuthority> authorities,
             boolean enabled,
-            Date updateTime
+            Date updateTime,
+            String audience
     ) {
         this.id = id;
         this.username = username;
@@ -32,6 +34,7 @@ public class JwtUser implements UserDetails {
         this.authorities = authorities;
         this.enabled = enabled;
         this.updateTime = updateTime;
+        this.audience = audience;
     }
 
     @JsonIgnore
@@ -81,5 +84,9 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     public Date getUpdateTime() {
         return updateTime;
+    }
+
+    public String getAudience() {
+        return audience;
     }
 }

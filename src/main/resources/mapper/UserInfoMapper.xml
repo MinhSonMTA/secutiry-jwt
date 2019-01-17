@@ -9,6 +9,7 @@
         <result property="enabled" column="enabled"/>
         <result property="authorityId" column="authorityId"/>
         <result property="authority" column="name"/>
+        <result property="additionalInfo" column="additional_info" typeHandler="com.felix.security.jwt.handlers.PGJsonbTypeHandler"/>
     </resultMap>
 
     <select id="findByUsername" resultMap="userInfoMap">

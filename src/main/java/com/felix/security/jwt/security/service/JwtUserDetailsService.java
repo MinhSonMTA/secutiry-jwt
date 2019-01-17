@@ -40,6 +40,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             user.setUsername(userInfoVos.get(0).getUsername());
             user.setPassword(userInfoVos.get(0).getPassword());
             user.setEnabled(userInfoVos.get(0).getEnabled());
+            user.setAdditionalInfo(userInfoVos.get(0).getAdditionalInfo());
             user.setUserAuthorities(userAuthorities);
         }
         return JwtUserFactory.create(user);

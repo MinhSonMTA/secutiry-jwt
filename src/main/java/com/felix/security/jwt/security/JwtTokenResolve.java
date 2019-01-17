@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 /**
+ * token解析器
  * @author felix-ma
  * @create 2019/1/17 13:45
  **/
