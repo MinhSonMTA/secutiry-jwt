@@ -16,7 +16,9 @@ $(function () {
     function getJwtToken() {
         var token = getCookie(TOKEN_KEY);
         console.log(token);
-        return getCookie(TOKEN_KEY);
+        if(token){
+            return token;
+        }
     }
 
     function setJwtToken(token) {
@@ -57,14 +59,16 @@ $(function () {
     }
 
     function doLogout() {
-        removeJwtToken();
-        $login.show();
-        $userInfo
-            .hide()
-            .find("#userInfoBody").empty();
-        $loggedIn.hide();
-        $loggedInBody.empty();
-        $notLoggedIn.show();
+        $.get("/logout",function (data) {
+            $login.show();
+            $userInfo
+                .hide()
+                .find("#userInfoBody").empty();
+            $loggedIn.hide();
+            $loggedInBody.empty();
+            $notLoggedIn.show();
+        });
+        // removeJwtToken();
     }
 
     function createAuthorizationTokenHeader() {

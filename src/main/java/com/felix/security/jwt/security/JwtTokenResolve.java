@@ -30,23 +30,20 @@ import java.util.stream.Collectors;
  *
  */
 @Component
-public class JwtTokenUtil implements Serializable {
+public class JwtTokenResolve implements Serializable {
     private static final long serialVersionUID = -3301605591108950415L;
-    //加载jwt.jks文件
-    private static PrivateKey privateKey = null;
+
     private static PublicKey publicKey = null;
+
+
+    @Value("${jwt.cert.filename}")
+    private String certFileName;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.keystore.filename}")
-    private String keyStoreFileName;
-
     @Value("${jwt.keystore.password}")
     private String keyStorePassword;
-
-    @Value("${jwt.key.aliase}")
-    private String keyAliase;
 
     @Value("${jwt.expiration}")
     private Long expiration;
@@ -59,12 +56,7 @@ public class JwtTokenUtil implements Serializable {
     @PostConstruct
     private void init() {
         try {
-            InputStream inputStream = resourceLoader.getResource("classpath:" + keyStoreFileName).getInputStream();
-            KeyStore keyStore = KeyStore.getInstance("JKS");
-            keyStore.load(inputStream, keyStorePassword.toCharArray());
-            privateKey = (PrivateKey) keyStore.getKey(keyAliase, keyStorePassword.toCharArray());
-            inputStream.close();
-            inputStream = resourceLoader.getResource("classpath:" + "cert.pem").getInputStream();
+            InputStream inputStream = resourceLoader.getResource("classpath:" + certFileName).getInputStream();
             X509Certificate cert = X509Certificate.getInstance(inputStream);
             publicKey = cert.getPublicKey();
             inputStream.close();
@@ -116,46 +108,10 @@ public class JwtTokenUtil implements Serializable {
         return false;
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        List<String> collect = userDetails.getAuthorities().stream().map(Object::toString).collect(Collectors.toList());
-        return doGenerateToken(claims, userDetails.getUsername(), StringUtils.collectionToCommaDelimitedString(collect));
-    }
-
-    private String doGenerateToken(Map<String, Object> claims, String subject, String aduience) {
-        final Date createdDate = clock.now();
-        final Date expirationDate = calculateExpirationDate(createdDate);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setAudience(aduience)
-                .setIssuedAt(createdDate)
-                .setExpiration(expirationDate)
-//                .signWith(SignatureAlgorithm.HS512, secret)
-                .signWith(SignatureAlgorithm.RS256, privateKey)
-                .compact();
-    }
-
     public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
         final Date created = getIssuedAtDateFromToken(token);
         return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
                 && (!isTokenExpired(token) || ignoreTokenExpiration(token));
-    }
-
-    public String refreshToken(String token) {
-        final Date createdDate = clock.now();
-        final Date expirationDate = calculateExpirationDate(createdDate);
-
-        final Claims claims = getAllClaimsFromToken(token);
-        claims.setIssuedAt(createdDate);
-        claims.setExpiration(expirationDate);
-
-        return Jwts.builder()
-                .setClaims(claims)
-//                .signWith(SignatureAlgorithm.HS512, secret)
-                .signWith(SignatureAlgorithm.RS256, privateKey)
-                .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

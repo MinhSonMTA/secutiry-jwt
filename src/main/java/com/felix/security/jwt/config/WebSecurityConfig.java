@@ -2,7 +2,9 @@ package com.felix.security.jwt.config;
 
 import com.felix.security.jwt.security.JwtAuthenticationEntryPoint;
 import com.felix.security.jwt.security.JwtAuthorizationTokenFilter;
+import com.felix.security.jwt.security.JwtUser;
 import com.felix.security.jwt.security.service.JwtUserDetailsService;
+import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +18,16 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -38,8 +47,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${jwt.header}")
     private String tokenHeader;
 
-    @Value("${jwt.route.authentication.path}")
+    @Value("${jwt.route.authentication.auth}")
     private String authenticationPath;
+
+    @Value("${jwt.route.authentication.logout}")
+    private String logoutUrl;
+
+    @Value("${jwt.cookie.name}")
+    private String cookieName;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -86,6 +101,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .frameOptions().sameOrigin()  // required to set for H2 else H2 Console will be blank.
                 .cacheControl();
+
+        // logout
+        httpSecurity
+                .logout()
+                .logoutUrl(logoutUrl)
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+
+                })
+                .permitAll()
+                .invalidateHttpSession(true)
+                .deleteCookies(cookieName);
     }
 
     @Override

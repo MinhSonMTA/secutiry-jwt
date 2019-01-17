@@ -87,6 +87,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
                 logger.info("authorizated user '{}', setting security context", username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else{
+                cookieUtil.delCookie(request, "/", response, cookieName);
                 logger.debug("unvalidate user '{}'", username);
             }
         }

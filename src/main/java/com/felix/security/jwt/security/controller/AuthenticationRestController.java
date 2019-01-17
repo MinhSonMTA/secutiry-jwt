@@ -44,7 +44,7 @@ public class AuthenticationRestController {
     @Value("${jwt.cookie.name}")
     private String cookieName;
 
-    @RequestMapping(value = "${jwt.route.authentication.path}", method = RequestMethod.POST)
+    @RequestMapping(value = "${jwt.route.authentication.auth}", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(HttpServletResponse response, @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
 
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
@@ -59,14 +59,16 @@ public class AuthenticationRestController {
     }
 
     @RequestMapping(value = "${jwt.route.authentication.refresh}", method = RequestMethod.GET)
-    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
-        String authToken = request.getHeader(tokenHeader);
-        final String token = authToken.substring(7);
+    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletResponse response, HttpServletRequest request) {
+//        String authToken = request.getHeader(tokenHeader);
+//        final String token = authToken.substring(7);
+        String token = cookieUtil.getCookieValue(request, cookieName);
         String username = jwtTokenUtil.getUsernameFromToken(token);
         JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
 
         if (jwtTokenUtil.canTokenBeRefreshed(token, user.getUpdateTime())) {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
+            cookieUtil.addCookie(response, "/", cookieName, refreshedToken);
             return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
         } else {
             return ResponseEntity.badRequest().body(null);
