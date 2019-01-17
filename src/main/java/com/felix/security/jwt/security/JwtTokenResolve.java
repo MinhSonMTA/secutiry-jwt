@@ -3,32 +3,25 @@ package com.felix.security.jwt.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.security.cert.X509Certificate;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.security.KeyStore;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
- *
- */
+ * @author felix-ma
+ * @create 2019/1/17 13:45
+ **/
 @Component
 public class JwtTokenResolve implements Serializable {
     private static final long serialVersionUID = -3301605591108950415L;

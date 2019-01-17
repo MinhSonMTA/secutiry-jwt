@@ -26,9 +26,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
 /**
- *
- */
+ * @author felix-ma
+ * @create 2019/1/17 13:49
+ **/
 @Component
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -3301605591108950415L;
