@@ -45,9 +45,9 @@ public class UserTest {
 
     @Test
     public void addUserTest() {
-        String password = passwordEncoderBean.encode("admin");
+        String password = passwordEncoderBean.encode("password");
         UserInfo user = new UserInfo();
-        user.setUsername("admin");
+        user.setUsername("disabled");
         user.setPassword(password);
         user.setEnabled(true);
         user.setUpdateTime(new Date());

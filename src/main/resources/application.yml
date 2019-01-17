@@ -1,0 +1,48 @@
+server:
+  port: 9980
+
+# DataSource Config
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/jwt
+#    driverClassName: org.postgresql.Driver
+#    username: postgres
+#    password: postgres
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    schema: classpath:db/schema-h2.sql
+    data: classpath:db/data-h2.sql
+    url: jdbc:h2:mem:jwt
+    username: root
+    password: test
+
+#mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  global-config:
+    db-column-underline: true
+    id-type: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+  type-handlers-package: com.felix.security.jwt.handlers
+
+#jwt
+jwt:
+  keystore:
+    filename: gateway.jks
+    password: 123456
+  cert:
+    filename: cert.pem
+  key:
+    aliase: gateway-identity-jks
+  header: Authorization
+  secret: mySecret
+  expiration: 604800
+  cookie.name: jwt-cookie
+  route:
+    authentication:
+      auth: /auth
+      refresh: /refresh
+      logout: /logout
